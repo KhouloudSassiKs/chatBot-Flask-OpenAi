@@ -20,7 +20,22 @@ def chat():
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": user_message}],
-        n=3
+        # number of response
+        n=3,
+        # limit length of the response
+        max_tokens = 100, 
+        # controle the creativity, 0.2 is relatively small creativity = focused response,
+        # 1.7 is high means more creativity on the topic, less focus
+        temperature= 0.2, 
+        # penalize AI for repeating words that were used in previous conversations, focus on conversations!!
+        # 0.0 less penalty allowing AI to repeat more words freely
+        # 1.0 high penalty encouraging the introduction of new topics, less repetition
+        presence_penalty=0.8,
+        # penalize AI for repeating words that were used in this same response,
+        # 0.0 less penalty allowing AI to repeat more words freely
+        # 1.0 high penalty encouraging the introduction of new topics, less repetition
+        frequency_penalty=0.9,
+        
     )
     
     # Extract the 3 responses
