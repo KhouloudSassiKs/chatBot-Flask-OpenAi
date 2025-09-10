@@ -40,11 +40,7 @@ def send_message(messages, user_msg=None, n=1):
     response = client.chat.completions.create(
         model="gpt-4",
         messages=messages,
-        n=n,
-        max_tokens=100,
-        temperature=0.2,
-        presence_penalty=0.8,
-        frequency_penalty=0.9,
+        n=n
     )
 
     if n == 1:
