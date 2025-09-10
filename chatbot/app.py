@@ -19,8 +19,24 @@ conversation = [
     {"role": "user", "content": "Hello, chat bot at your service!"}  # initial message
 ]
 
-def send_message(messages, n=1):
-    """Helper to send messages to GPT-4 and return response(s)."""
+# -----------------------
+# Unified send_message function
+# -----------------------
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Sends a message to GPT-4, updates conversation history, and returns reply(s).
+
+Args:
+messages (list): Conversation history.
+user_msg (str, optional): User message to append before sending. Defaults to None.
+n (int): Number of responses to request from GPT. Defaults to 1.
+
+Returns:
+   str or list: Assistant's reply or list of replies.
+"""
+def send_message(messages, user_msg=None, n=1):
+    if user_msg:
+        messages.append({"role": "user", "content": user_msg})
+
     response = client.chat.completions.create(
         model="gpt-4",
         messages=messages,
@@ -30,20 +46,37 @@ def send_message(messages, n=1):
         presence_penalty=0.8,
         frequency_penalty=0.9,
     )
+
     if n == 1:
-        return response.choices[0].message.content.strip()
-    return [choice.message.content.strip() for choice in response.choices]
+        reply = response.choices[0].message.content.strip()
+        messages.append({"role": "assistant", "content": reply})
+        return reply
 
-# Get the first reply from GPT
-initial_reply = send_message(conversation, n=1)
-print("Assistant:", initial_reply)
-conversation.append({"role": "assistant", "content": initial_reply})
+    replies = [choice.message.content.strip() for choice in response.choices]
+    messages.append({"role": "assistant", "content": replies[0]})
+    return replies
 
+# -----------------------
+# Demo conversation (bird facts)
+# -----------------------
+bird_conversation = []
+
+send_message(bird_conversation, "Can you tell me a fun fact about birds?")
+send_message(bird_conversation, "Follow up question: can you tell another fact")
+
+# Optional: print demo conversation
+for item in bird_conversation:
+    print(f"{item['role'].capitalize()} : {item['content']}")
+
+# -----------------------
+# Regular chatbot initial message
+# -----------------------
+initial_reply = send_message(conversation)
+print("Assistant (chatbot):", initial_reply)
 
 # -----------------------
 # Flask routes
 # -----------------------
-
 @app.route('/')
 def index():
     # Pass the assistant’s initial reply into the template
@@ -56,14 +89,8 @@ def chat():
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
 
-    # Add user message to conversation
-    conversation.append({"role": "user", "content": user_message})
-
-    # Get 3 different responses
-    replies = send_message(conversation, n=3)
-
-    # Save the first reply to conversation history (for continuity)
-    conversation.append({"role": "assistant", "content": replies[0]})
+    # Get 3 different responses from GPT
+    replies = send_message(conversation, user_msg=user_message, n=3)
 
     return jsonify({"responses": replies})
 
