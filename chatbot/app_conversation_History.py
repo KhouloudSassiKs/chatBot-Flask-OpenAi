@@ -7,8 +7,13 @@ app = Flask(__name__)
 # -----------------------
 # Setup OpenAI client
 # -----------------------
-# Replace with your API key or set as an environment variable
-client = OpenAI(api_key="YOUR_OPENAI_API_KEY")
+# Setup OpenAI client
+# I can't share my personal api key here, you can get your own key:
+# 1. Login to your account 
+# 2. Go to https://platform.openai.com/account/api-keys 
+# 3. OpenAi will generate a secret key for you 
+# 4. Use your key and do not share it
+client = OpenAI("OPENAI_API_KEY")
 
 # -----------------------
 # Initial conversation setup
