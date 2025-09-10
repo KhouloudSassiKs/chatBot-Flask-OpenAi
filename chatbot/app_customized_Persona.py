@@ -3,13 +3,17 @@ from openai import OpenAI
 # -----------------------
 # Initialize OpenAI client
 # -----------------------
-# Make sure to set your API key in an environment variable or replace below
-client = OpenAI(api_key="YOUR_OPENAI_API_KEY")
-
+# Setup OpenAI client
+# I can't share my personal api key here, you can get your own key:
+# 1. Login to your account 
+# 2. Go to https://platform.openai.com/account/api-keys 
+# 3. OpenAi will generate a secret key for you 
+# 4. Use your key and do not share it
+client = OpenAI("OPENAI_API_KEY")
 # -----------------------
 # Helper function
 # -----------------------
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""
 Send a conversation history to GPT-4 and return the assistant's reply.
 
 Args:
