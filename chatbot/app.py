@@ -8,6 +8,26 @@ app = Flask(__name__)
 # 3. OpenAi will generate a secret key for you
 # 4. use your key and do not share it
 client = OpenAI(api_key="YOUR_OPENAI_API_KEY")  
+
+# -----------------------
+# Initial conversation setup
+# -----------------------
+conversation = [
+    {"role": "user", "content": "Hello, chat bot at your service!"}  # initial message
+]
+
+def send_message(messages):
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages,
+        max_tokens=100,
+        temperature=0.2,
+    )
+    return response.choices[0].message.content.strip()
+
+# Get the first reply from GPT
+initial_reply = send_message(conversation)
+print("Assistant:", initial_reply)
 @app.route('/')
 def index():
     return render_template('index.html')
