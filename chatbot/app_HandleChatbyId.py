@@ -19,8 +19,13 @@ def create_chat():
     chat_sessions[chat_id] = [system_prompt.copy()]  # Initialize conversation with system prompt
     return chat_id
 
-# Initialize OpenAI client
-client = OpenAI()
+# Setup OpenAI client
+# I can't share my personal api key here, you can get your own key:
+# 1. Login to your account 
+# 2. Go to https://platform.openai.com/account/api-keys 
+# 3. OpenAi will generate a secret key for you 
+# 4. Use your key and do not share it
+client = OpenAI("OPENAI_API_KEY")
 
 # Function to send a message in a chat session
 def send_message(chat_id, user_msg):
